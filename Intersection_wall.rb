@@ -44,8 +44,8 @@ def cortar_parede(nome_parede, nome_cortador)
 
     # === PushPull automático ===
     if faces_novas.any?
-      distancia = -espessura_parede
       faces_novas.each do |face|
+        distancia = face.normal.dot(Z_AXIS) < 0 ? espessura_parede : -espessura_parede
         begin
           face.pushpull(distancia)
         rescue => e
