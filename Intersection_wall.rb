@@ -1,4 +1,4 @@
-def cortar_parede(nome_parede, nome_cortador)
+def drill_wall(nome_parede, nome_cortador)
   model = Sketchup.active_model
   model.start_operation("Cortar Parede", true)
 

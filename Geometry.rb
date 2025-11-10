@@ -1,4 +1,4 @@
-def gerar_geometrias
+def create_geometry
     model = Sketchup.active_model
     model.start_operation("Configuração de Componentes para Corte", true)
     
