@@ -1,5 +1,3 @@
-require 'CreateCloneBbox/create_clone_from_bbox'
-
 module DrillWall
   def drill_wall(nome_parede, nome_cortador = nil)
     model = Sketchup.active_model
