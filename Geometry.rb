@@ -1,11 +1,10 @@
-def create_geometry
+module Geometry
+  def create_geometry
     model = Sketchup.active_model
     model.start_operation("Configuração de Componentes para Corte", true)
     
     begin
       entities = model.entities
-      definitions = model.definitions
-      
       
       #Cria um grupo temporário para a conversão
       grupo_temp_parede = entities.add_group
@@ -60,3 +59,4 @@ def create_geometry
       return "❌ Erro: #{e.message}"
     end
   end
+end
