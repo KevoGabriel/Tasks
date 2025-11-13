@@ -1,13 +1,6 @@
 module DrillWall
   def drill_wall(nome_parede, nome_cortador = nil)
     model = Sketchup.active_model
-
-    # Se não passar o nome do cortador, ele será criado agora
-    unless nome_cortador
-      nome_cortador = create_clone_from_bbox
-      return "Erro ao criar clone." unless nome_cortador
-    end
-
     model.start_operation("Cortar Parede", true)
 
     begin

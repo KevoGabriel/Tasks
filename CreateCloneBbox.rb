@@ -1,4 +1,4 @@
-module CreateClonebBox
+module CreateCloneBbox
   def create_clone_from_bbox
     model = Sketchup.active_model
     selection = model.selection
