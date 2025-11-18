@@ -2,18 +2,18 @@ module CreateCloneBbox
   def create_clone_from_bbox
     model = Sketchup.active_model
     selection = model.selection
-    model.start_operation("Clone Retangular (Bounding Box)", true)
+    model.start_operation('Clone Retangular (Bounding Box)', true)
 
     begin
       if selection.empty?
-        UI.messagebox("Por favor, selecione um componente ou grupo para gerar o clone.")
+        UI.messagebox('Por favor, selecione um componente ou grupo para gerar o clone.')
         return
       end
 
       instance = selection.first
 
       unless instance.is_a?(Sketchup::Group) || instance.is_a?(Sketchup::ComponentInstance)
-        UI.messagebox("Selecione um grupo ou componente.")
+        UI.messagebox('Seleção inválida. Por favor, selecione um componente ou grupo.')
         return
       end
 
@@ -46,12 +46,15 @@ module CreateCloneBbox
       component_instance = clone_group.to_component
 
       # Nomeia o componente baseado no original
-      base_name = "Clone_Retangular_#{instance.definition.name rescue 'SemNome'}"
+      base_name = "Clone_Retangular_#{begin
+        instance.definition.name
+      rescue StandardError
+        'SemNome'
+      end}"
       component_instance.definition.name = base_name
 
-      UI.messagebox("Clone retangular criado e convertido em componente com sucesso!")
-
-    rescue => e
+      UI.messagebox('Clone retangular criado e convertido em componente com sucesso!')
+    rescue StandardError => e
       UI.messagebox("Erro ao criar clone: #{e.message}")
       puts e.backtrace.join("\n")
     ensure

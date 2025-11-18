@@ -1,7 +1,7 @@
 module DrillWall
   def drill_wall(nome_parede, nome_cortador = nil)
     model = Sketchup.active_model
-    model.start_operation("Cortar Parede", true)
+    model.start_operation('Cortar Parede', true)
 
     begin
       parede = model.entities.grep(Sketchup::ComponentInstance).find { |c| c.definition.name == nome_parede }
@@ -9,7 +9,7 @@ module DrillWall
 
       unless parede && cortador
         model.abort_operation
-        return "Componentes não encontrados."
+        return 'Componentes não encontrados.'
       end
 
       entities_parede = parede.definition.entities
@@ -49,7 +49,7 @@ module DrillWall
           distancia = -espessura_parede
           begin
             face.pushpull(distancia)
-          rescue => e
+          rescue StandardError => e
             puts "Erro ao aplicar pushpull em #{face}: #{e.message}"
           end
         end
@@ -59,11 +59,10 @@ module DrillWall
       temp_instance.erase!
       model.commit_operation
 
-      return "Recorte concluído!"
-
-    rescue => e
+      'Recorte concluído!'
+    rescue StandardError => e
       model.abort_operation
-      return "Erro: #{e.message}"
+      "Erro: #{e.message}"
     end
   end
 end
