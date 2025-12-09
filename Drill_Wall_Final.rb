@@ -24,6 +24,7 @@ def drill_wall(nome_parede, nome_cortador)
     face = temp_group.entities.add_face(base_corners)
     face.reverse! if face.normal.z < 0
 
+    
     temp_group.transform!(Geom::Transformation.translation([0, -1.mm, 0]))
 
     # Configurações da parede
@@ -37,8 +38,11 @@ def drill_wall(nome_parede, nome_cortador)
       bounds_parede.depth
     ].min
 
+    puts "Espessura da parede estimada: #{espessura} mm"
+
     # Solução simples: Empurra a face do clone para a criação de um volume sólido da espessura da parede, forçando a operação de interseção e pushpull
-    face.pushpull(-espessura)
+
+    # face.pushpull(-espessura)
 
     faces_antes = entities_parede.grep(Sketchup::Face)
 
@@ -69,7 +73,6 @@ def drill_wall(nome_parede, nome_cortador)
 
     model.commit_operation
     "Recorte concluído!"
-
   rescue => e
     model.abort_operation
     "Erro: #{e.message}"
