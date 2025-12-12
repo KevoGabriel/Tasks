@@ -18,14 +18,14 @@ def drill_wall(nome_parede, nome_cortador)
     # Cria cortador temporário baseado no bounding box (ponto-chave)
     bbox = cortador.bounds
     corners = (0..7).map { |i| bbox.corner(i) }
-    base_corners = [corners[0], corners[1], corners[5], corners[4]]
+    base_corners = [corners[0], corners[1], corners[5], corners[4]] #1 é  
 
     temp_group = model.active_entities.add_group
     face = temp_group.entities.add_face(base_corners)
     face.reverse! if face.normal.z < 0
 
     
-    temp_group.transform!(Geom::Transformation.translation([0, -1.mm, 0]))
+    temp_group.transform!(Geom::Transformation.translation([0, 0, 0.1.mm]))
 
     # Configurações da parede
     entities_parede = parede.definition.entities
@@ -42,7 +42,7 @@ def drill_wall(nome_parede, nome_cortador)
 
     # Solução simples: Empurra a face do clone para a criação de um volume sólido da espessura da parede, forçando a operação de interseção e pushpull
 
-    # face.pushpull(-espessura)
+    face.pushpull(-espessura)
 
     faces_antes = entities_parede.grep(Sketchup::Face)
 
