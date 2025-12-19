@@ -18,15 +18,15 @@ def drill_wall(nome_parede, nome_cortador)
     # Cria cortador temporário baseado no bounding box (ponto-chave)
     bbox = cortador.bounds
     corners = (0..7).map { |i| bbox.corner(i) }
-    base_corners = [corners[0], corners[1], corners[5], corners[4]] #1 é  
+    base_corners = [corners[0], corners[1], corners[5], corners[4]] 
 
     temp_group = model.active_entities.add_group
     face = temp_group.entities.add_face(base_corners)
     face.reverse! if face.normal.z < 0
 
     
-    temp_group.transform!(Geom::Transformation.translation([0, 0, 0.1.mm]))
-
+    temp_group.transform!(Geom::Transformation.translation([0, 0, 0])) # X, Y, Z já estão corretos pelo bounding box, podendo ser comentado essa linha
+    
     # Configurações da parede
     entities_parede = parede.definition.entities
     trans_parede = parede.transformation
@@ -41,8 +41,9 @@ def drill_wall(nome_parede, nome_cortador)
     puts "Espessura da parede estimada: #{espessura} mm"
 
     # Solução simples: Empurra a face do clone para a criação de um volume sólido da espessura da parede, forçando a operação de interseção e pushpull
-
     face.pushpull(-espessura)
+    # Problema: Se parte da janela fica de fora da parede, sua sobra se soma ao volume da parede, criando geometrias indesejadas
+
 
     faces_antes = entities_parede.grep(Sketchup::Face)
 
@@ -60,9 +61,9 @@ def drill_wall(nome_parede, nome_cortador)
     faces_depois = entities_parede.grep(Sketchup::Face)
     novas_faces = faces_depois - faces_antes
 
-    novas_faces.each do |face|
+    novas_faces.each do |wall_face|
       begin
-        face.pushpull(-espessura)
+        wall_face.pushpull(-espessura)
       rescue => e
         puts "Erro pushpull: #{e.message}"
       end
